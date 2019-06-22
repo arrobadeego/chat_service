@@ -19,7 +19,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  timestamps: true,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 UserSchema.pre('save', async (next) => {
