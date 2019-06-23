@@ -1,0 +1,12 @@
+{
+    "user": [
+        { "id": 1, "status": "online" },
+        { "id": 2, "status": "away" },
+        { "id": 3, "status": "busy" },
+        { "id": 4, "status": "offline" }
+    ],
+    "contacts": [
+        { "id": 1, "status": "available" },
+        { "id": 2, "status": "blocked" }
+    ]
+}
