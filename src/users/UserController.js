@@ -16,6 +16,8 @@ module.exports = {
       return res.status(400).send({ error: 'Inavlid password' });
     }
 
+    user.password = undefined;
+
     return res.json(user);
   },
 
@@ -29,6 +31,8 @@ module.exports = {
     });
 
     req.io.emit('user', user);
+
+    user.password = undefined;
 
     return res.json(user);
   },
