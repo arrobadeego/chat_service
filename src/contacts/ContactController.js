@@ -10,14 +10,21 @@ function generateToken(params = {}) {
 }
 
 module.exports = {
-
-  async store(req, res) {
+  async list(req, res) {
     jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
       const user = await User.findById(decoded.id);
-      if (err) return res.json(err);
-      user.contacts.push(req.body.id);
       res.setHeader("Authorization", generateToken({ id: user.id }));
-      return res.json({ user });
+      return res.json({ contacts: user.contacts });
     });
   },
+
+  // async store(req, res) {
+  //   jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
+  //     const user = await User.findById(decoded.id);
+  //     if (err) return res.json(err);
+  //     user.contacts.push(req.body.id);
+  //     res.setHeader("Authorization", generateToken({ id: user.id }));
+  //     return res.json({ user });
+  //   });
+  // },
 };
