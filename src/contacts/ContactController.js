@@ -16,6 +16,7 @@ module.exports = {
       const user = await User.findById(decoded.id);
       if (err) return res.json(err);
       user.contacts.push(req.body.id);
+      res.setHeader("token", generateToken({ id: user.id }));
       return res.json({ user });
     });
   },

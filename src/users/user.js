@@ -21,7 +21,13 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   contacts: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'Contact' },
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User', status: String },
+  ],
+  invites: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  ],
+  requests: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   ],
   createdAt: {
     type: Date,

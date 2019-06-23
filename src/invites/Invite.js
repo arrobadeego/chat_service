@@ -1,7 +1,6 @@
-/* eslint-disable func-names */
 const mongoose = require('mongoose');
 
-const ContactSchema = new mongoose.Schema({
+const InviteSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
@@ -12,4 +11,4 @@ const ContactSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Contact', ContactSchema);
+module.exports = mongoose.model('Invite', InviteSchema);
