@@ -12,11 +12,11 @@ function generateToken(params = {}) {
 module.exports = {
 
   async store(req, res) {
-    jwt.verify(req.headers.token, authConfig.secret, async (err, decoded) => {
+    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
       const user = await User.findById(decoded.id);
       if (err) return res.json(err);
       user.contacts.push(req.body.id);
-      res.setHeader("token", generateToken({ id: user.id }));
+      res.setHeader("Authorization", generateToken({ id: user.id }));
       return res.json({ user });
     });
   },

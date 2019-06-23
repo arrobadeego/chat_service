@@ -26,7 +26,7 @@ module.exports = {
 
     user.password = undefined;
 
-    res.setHeader("token", generateToken({ id: user.id }));
+    res.setHeader("Authorization", generateToken({ id: user.id }));
     return res.json({ user });
   },
 
@@ -43,7 +43,7 @@ module.exports = {
 
     user.password = undefined;
 
-    res.setHeader("token", generateToken({ id: user.id }));
+    res.setHeader("Authorization", generateToken({ id: user.id }));
     return res.json({ user });
   },
 };
