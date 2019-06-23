@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('./User');
 
 module.exports = {
@@ -17,6 +18,8 @@ module.exports = {
     }
 
     user.password = undefined;
+
+    const token = jwt.sign({ id: user.id }, );
 
     return res.json(user);
   },
