@@ -3,7 +3,6 @@ const User = require('./User');
 module.exports = {
 
   async store(req, res) {
-    console.log(req.body);
     const {
       name, email, password, status,
     } = req.body;
@@ -11,6 +10,8 @@ module.exports = {
     const user = await User.create({
       name, email, password, status,
     });
+
+    req.io.emit('user', user);
 
     return res.json(user);
   },
