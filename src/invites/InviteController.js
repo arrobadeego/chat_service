@@ -37,6 +37,31 @@ module.exports = {
       invited.received.push({ user_id: user.id });
 
       user.save();
+      invited.save();
+
+      res.setHeader("Authorization", generateToken({ _id: user.id }));
+      return res.json({ user });
+    });
+  },
+
+  async friendRequest(req, res) {
+    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
+      const user = await User.findById(decoded.id);
+      const invited = await User.findById(req.body.id);
+
+      if (err) return res.json(err);
+
+      if (req.body.isAccepted) {
+        // eslint-disable-next-line no-underscore-dangle
+        user.contact.push({ user_id: invited._id, status: 1 });
+        // eslint-disable-next-line no-underscore-dangle
+        user.contact.push({ user_id: user._id, status: 1 });
+      }
+
+      // eslint-disable-next-line no-underscore-dangle
+      await user.sent.findOneAndDelete({ user_id: invited._id });
+      // eslint-disable-next-line no-underscore-dangle
+      await invited.received.findOneAndDelete({ user_id: user._id });
 
       res.setHeader("Authorization", generateToken({ _id: user.id }));
       return res.json({ user });

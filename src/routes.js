@@ -8,7 +8,7 @@ const routes = new express.Router();
 routes.post('/login', UserController.authenticate);
 routes.post('/registration', UserController.store);
 routes.get('/contacts', ContactController.list);
-// routes.get('/sent', SentController.list);
 routes.post('/sent', InviteController.store);
+routes.post('/sent/request', InviteController.friendRequest);
 
 module.exports = routes;
