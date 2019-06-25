@@ -21,26 +21,18 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   contacts: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'User', status: String },
+    { user_id: String, status: String },
   ],
-  invites: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  sent: [
+    { user_id: String, status: String },
   ],
-  requests: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  received: [
+    { user_id: String, status: String },
   ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
-});
-
-UserSchema.pre('save', async function (next) {
-  const hash = await bcrypt.hash(this.password, 10);
-
-  this.password = hash;
-
-  next();
 });
 
 module.exports = mongoose.model('User', UserSchema);

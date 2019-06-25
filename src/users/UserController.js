@@ -32,8 +32,13 @@ module.exports = {
 
   async store(req, res) {
     const {
-      name, email, password, status,
+      name, email, status,
     } = req.body;
+
+    let { password } = req.body;
+
+    const hash = await bcrypt.hash(password, 10);
+    password = hash;
 
     const user = await User.create({
       name, email, password, status,
