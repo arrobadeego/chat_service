@@ -47,21 +47,26 @@ module.exports = {
   async friendRequest(req, res) {
     jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
       const user = await User.findById(decoded.id);
-      const invited = await User.findById(req.body.id);
+      const request = await User.findById(req.body.id);
 
       if (err) return res.json(err);
+      if (!user) return res.json({ error: "User not found" });
+      if (!request) return res.json({ error: "Invite not found" });
 
       if (req.body.isAccepted) {
         // eslint-disable-next-line no-underscore-dangle
-        user.contact.push({ user_id: invited._id, status: 1 });
+        user.contacts.push({ user_id: request._id, status: 1 });
         // eslint-disable-next-line no-underscore-dangle
-        user.contact.push({ user_id: user._id, status: 1 });
+        request.contacts.push({ user_id: user._id, status: 1 });
       }
 
       // eslint-disable-next-line no-underscore-dangle
-      await user.sent.findOneAndDelete({ user_id: invited._id });
+      user.received = await user.received.filter(r => String(r.user_id) !== String(request._id));
       // eslint-disable-next-line no-underscore-dangle
-      await invited.received.findOneAndDelete({ user_id: user._id });
+      request.sent = await request.sent.filter(r => String(r.user_id) !== String(user._id));
+
+      user.save();
+      request.save();
 
       res.setHeader("Authorization", generateToken({ _id: user.id }));
       return res.json({ user });
