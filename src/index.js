@@ -21,7 +21,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors());
+const corsOptions = {
+  exposedHeaders: 'Authorization',
+};
+
+app.use(cors(corsOptions));
+
 app.use(require('./routes'));
 
 app.listen(3333);
