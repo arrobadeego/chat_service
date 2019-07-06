@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../users/User');
 const authConfig = require('../config/auth.json');
@@ -14,17 +13,12 @@ module.exports = {
     jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
       const user = await User.findById(decoded.id);
       res.setHeader("Authorization", generateToken({ id: user.id }));
-      return res.json({ contacts: user.contacts });
+
+      const contactsIds = user.contacts.map(contact => contact.user_id);
+      const contactsList = await User.find({ _id: { $in: contactsIds } });
+      const contacts = contactsList.map(contact => ({ id: contact._id, name: contact.name, status: contact.status }));
+
+      return res.json({ contacts });
     });
   },
-
-  // async store(req, res) {
-  //   jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
-  //     const user = await User.findById(decoded.id);
-  //     if (err) return res.json(err);
-  //     user.contacts.push(req.body.id);
-  //     res.setHeader("Authorization", generateToken({ id: user.id }));
-  //     return res.json({ user });
-  //   });
-  // },
 };
