@@ -34,6 +34,19 @@ module.exports = {
     return res.json({ user });
   },
 
+  async profile(req, res) {
+    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
+      const user = await User.findById(decoded.id);
+
+
+      if (err) return res.json(err);
+      if (!user) return res.json({ error: "User not found" });
+
+      res.setHeader("Authorization", generateToken({ _id: user.id }));
+      return res.json({ name: user.name, email: user.email, photo: `http://localhost:3333/files${user.photo}` });
+    });
+  },
+
   async store(req, res) {
     const {
       name, email,
