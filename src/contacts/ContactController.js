@@ -16,6 +16,7 @@ module.exports = {
 
       const contactsIds = user.contacts.map(contact => contact.user_id);
       const contactsList = await User.find({ _id: { $in: contactsIds } });
+      // eslint-disable-next-line no-underscore-dangle
       const contacts = contactsList.map(contact => ({ id: contact._id, name: contact.name, status: contact.status }));
 
       return res.json({ contacts });
