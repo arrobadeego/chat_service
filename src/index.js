@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 
@@ -26,6 +27,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
 
 app.use(require('./routes'));
 
