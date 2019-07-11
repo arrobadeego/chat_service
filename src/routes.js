@@ -9,6 +9,7 @@ const routes = new express.Router();
 const upload = multer(uploadConfig);
 
 routes.post('/login', UserController.authenticate);
+routes.get('/profile', UserController.profile);
 routes.post('/registration', upload.single('photo'), UserController.store);
 routes.get('/contacts', ContactController.list);
 routes.post('/sent', InviteController.store);
