@@ -43,7 +43,7 @@ module.exports = {
       if (!user) return res.json({ error: "User not found" });
 
       res.setHeader("Authorization", generateToken({ _id: user.id }));
-      return res.json({ name: user.name, email: user.email, photo: `http://localhost:3333/files${user.photo}` });
+      return res.json({ name: user.name, email: user.email, photo: `http://localhost:3333/files/${user.photo}` });
     });
   },
 
