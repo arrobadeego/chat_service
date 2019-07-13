@@ -13,6 +13,14 @@ function generateToken(params = {}) {
   });
 }
 
+function setPhoto(photo) {
+  if (photo === undefined) {
+    return 'http://localhost:3333/files/undefined.jpg';
+  } else {
+    return `http://localhost:3333/files/${photo}`;
+  }
+}
+
 module.exports = {
 
   async authenticate(req, res) {
@@ -43,7 +51,8 @@ module.exports = {
       if (!user) return res.json({ error: "User not found" });
 
       res.setHeader("Authorization", generateToken({ _id: user.id }));
-      return res.json({ name: user.name, email: user.email, photo: `http://localhost:3333/files/${user.photo}` });
+
+      return res.json({ name: user.name, email: user.email, photo: setPhoto(user.photo) });
     });
   },
 
