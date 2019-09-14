@@ -1,10 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const path = require('path');
-const io = require('socket.io')(server);
-const routes = require('./routes');
+//const io = require('socket.io')(server);
+const routes = require('./routes/routes');
 
 // mongoose.connect('mongodb+srv://admin:12345@cluster0-vybfh.mongodb.net/test?retryWrites=true&w=majority', {
 //   useNewUrlParser: true,

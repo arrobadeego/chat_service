@@ -1,11 +1,12 @@
-const express = require('express');
+const { Router } = require('express');
 const multer = require('multer');
-const uploadConfig = require('./config/upload');
-const UserController = require('./users/UserController');
-const ContactController = require('./contacts/ContactController');
-const InviteController = require('./invites/InviteController');
 
-const routes = new express.Router();
+const uploadConfig = require('../config/upload');
+const UserController = require('../app/users/UserController');
+const ContactController = require('../app/contacts/ContactController');
+const InviteController = require('../app/invites/InviteController');
+
+const routes = Router();
 const upload = multer(uploadConfig);
 
 routes.post('/login', UserController.authenticate);
