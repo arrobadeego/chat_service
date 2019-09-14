@@ -3,31 +3,36 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-
-const app = express();
-
-const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const routes = require('./routes');
 
-mongoose.connect('mongodb+srv://admin:12345@cluster0-vybfh.mongodb.net/test?retryWrites=true&w=majority', {
-  useNewUrlParser: true,
-});
+// mongoose.connect('mongodb+srv://admin:12345@cluster0-vybfh.mongodb.net/test?retryWrites=true&w=majority', {
+//   useNewUrlParser: true,
+// });
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use((req, res, next) => {
+//   req.io = io;
 
-app.use((req, res, next) => {
-  req.io = io;
+//   next();
+// });
 
-  next();
-});
 
-const corsOptions = {
-  exposedHeaders: 'Authorization',
-};
+class App {
+  constructor() {
+    this.server = express();
+    this.routes();
+  }
 
-app.use(cors(corsOptions));
+  middlewares() {
+    this.server.use(cors());
+    this.server.use(express.json());
+    this.server.use(express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
+  }
 
-app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
 
-app.use(require('./routes'));
+  routes() {
+    this.server.use(routes);
+  }
+}
+
+module.exports = new App().server;
