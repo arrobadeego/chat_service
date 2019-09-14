@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const User = require('./User');
-const authConfig = require('../config/auth.json');
+const authConfig = require('../../config/auth.js/index.js');
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {

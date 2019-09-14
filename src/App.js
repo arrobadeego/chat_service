@@ -20,6 +20,8 @@ const routes = require('./routes/routes');
 class App {
   constructor() {
     this.server = express();
+
+    this.middlewares();
     this.routes();
   }
 
