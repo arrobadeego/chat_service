@@ -1,0 +1,67 @@
+Arguments: 
+  /usr/local/Cellar/node/12.9.0/bin/node /usr/local/Cellar/yarn/1.17.3/libexec/bin/yarn.js
+
+PATH: 
+  /Users/diegomoreira/.rvm/gems/ruby-2.5.2/bin:/Users/diegomoreira/.rvm/gems/ruby-2.5.2@global/bin:/Users/diegomoreira/.rvm/rubies/ruby-2.5.2/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/opt/local/bin:/opt/local/sbin:/Users/diegomoreira/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/Ghostscript/bin:/opt/ImageMagick/bin:/Users/diegomoreira/.rvm/gems/ruby-2.5.2/bin:/Users/diegomoreira/.rvm/gems/ruby-2.5.2@global/bin:/Users/diegomoreira/.rvm/rubies/ruby-2.5.2/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/opt/local/bin:/opt/local/sbin:/Users/diegomoreira/.rbenv/shims:/Users/diegomoreira/.rvm/bin:/usr/local/mongodb/bin:/usr/local/mongodb/bin
+
+Yarn version: 
+  1.17.3
+
+Node version: 
+  12.9.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/diegomoreira/Desktop/projetos/chatservice/package.json: Unexpected token } in JSON at position 932
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:304:30)
+      at /usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "chatservice",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+      "dev": "nodemon src/server.js"
+    },
+    "dependencies": {
+      "@sentry/node": "5.6.2",
+      "bcryptjs": "^2.4.3",
+      "cors": "^2.8.5",
+      "date-fns": "^2.0.0-beta.5",
+      "dotenv": "^8.1.0",
+      "express": "^4.17.1",
+      "express-async-errors": "^3.1.1",
+      "express-handlebars": "^3.1.0",
+      "jsonwebtoken": "^8.5.1",
+      "mongoose": "^5.6.11",
+      "multer": "^1.4.2",
+      "nodemailer": "^6.3.0",
+      "nodemailer-express-handlebars": "^3.1.0",
+      "sequelize": "^5.12.3",
+      "util.promisify": "^1.0.0",
+      "youch": "^2.0.10",
+      "yup": "^0.27.0"
+    },
+    "devDependencies": {
+      "eslint": "^5.16.0",
+      "eslint-config-airbnb-base": "^13.2.0",
+      "eslint-config-prettier": "^6.0.0",
+      "eslint-plugin-import": "^2.18.2",
+      "eslint-plugin-prettier": "^3.1.0",
+      "nodemon": "^1.19.1",
+      "prettier": "^1.18.2",
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

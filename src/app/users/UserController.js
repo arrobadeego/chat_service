@@ -1,11 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
 const User = require('./User');
-const authConfig = require('../../config/auth.js/index.js');
+const authConfig = require('../../config/auth.js');
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
@@ -71,15 +70,6 @@ module.exports = {
     const status = 1;
 
     const filename = `${Date.now().toString(36)}.jpg`;
-
-    await sharp(req.file.path)
-      .resize(500)
-      .jpeg({ quality: 70 })
-      .toFile(
-        path.resolve(req.file.destination, 'resized', filename),
-      );
-
-    fs.unlinkSync(req.file.path);
 
     const user = await User.create({
       name, email, password, status, photo: filename,

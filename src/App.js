@@ -16,7 +16,6 @@ const routes = require('./routes/routes');
 //   next();
 // });
 
-
 class App {
   constructor() {
     this.server = express();
@@ -28,7 +27,7 @@ class App {
   middlewares() {
     this.server.use(cors());
     this.server.use(express.json());
-    this.server.use(express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
+    //this.server.use(express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
   }
 
 
