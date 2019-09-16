@@ -18,6 +18,7 @@ routes.post('/login', SessionController.store);
 routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
+routes.put('/users/avatar', UserController.avatar);
 routes.get('/users', UserController.profile);
 routes.get('/contacts', ContactController.list);
 routes.post('/sent', InviteController.store);

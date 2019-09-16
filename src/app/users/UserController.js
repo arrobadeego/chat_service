@@ -79,7 +79,23 @@ module.exports = {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const user = await User.findOneAndUpdate({ _id: req.userId }, req.body, {
+    const { email, oldPassword } = req.body;
+
+    let user = await User.findOne({ _id: req.userId });
+
+    if (email && email !== user.email) {
+      const userExists = await User.findOne({ email });
+
+      if (userExists) {
+        return res.status(400).json({ error: 'User already exists' });
+      }
+    }
+
+    if (oldPassword && !(await user.checkPassword(oldPassword))) {
+      return res.status(401).json({ error: 'Password does not match' });
+    }
+
+    user = await User.findOneAndUpdate({ _id: req.userId }, req.body, {
       new: true,
     });
 
@@ -87,6 +103,16 @@ module.exports = {
   },
 
   async profile(req, res) {
+    const user = await User.findOne({ id: req.userid });
+
+    if (!user) {
+      return res.json('User not found').status(404);
+    }
+
+    return res.json({ id: user.id, name: user.name, email: user.email });
+  },
+
+  async avatar(req, res) {
     const user = await User.findOne({ id: req.userid });
 
     if (!user) {
