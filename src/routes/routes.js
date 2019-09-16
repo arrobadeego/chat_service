@@ -12,8 +12,8 @@ const authMiddleware = require('../routes/middleware');
 const routes = Router();
 const upload = multer(uploadConfig);
 
-routes.post('/login', UserController.authenticate);
 routes.post('/registration', UserController.store);
+routes.post('/login', SessionController.store);
 
 routes.use(authMiddleware);
 

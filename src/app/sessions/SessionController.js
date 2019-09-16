@@ -1,24 +1,35 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Yup = require('yup');
+
 const User = require('../users/User');
+const authConfig = require('../../config/auth.js');
+
+function generateToken(params = {}) {
+  return jwt.sign(params, authConfig.secret, {
+    expiresIn: 86400,
+  });
+}
 
 module.exports = {
 
   async store(req, res) {
-    console.log(req);
+    const { email, password } = req.body;
 
-    try {
-      const {
-        name, email, password,
-      } = req.body;
+    const user = await User.findOne({ email }).select('+password');
 
-      const status = 1;
-
-      const user = await User.create({
-        name, email, password, status,
-      });
-
-      return res.json(user);
-    } catch (err) {
-      return res.json(err);
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
     }
+
+    if (!await bcrypt.compare(password, user.password)) {
+      return res.status(400).json({ error: 'Inavlid password' });
+    }
+
+    user.password = undefined;
+
+    res.setHeader("Authorization", generateToken({ id: user.id }));
+
+    return res.json({ user });
   },
 };
