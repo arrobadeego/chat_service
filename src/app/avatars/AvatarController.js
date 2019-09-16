@@ -18,10 +18,20 @@ function setAvatar(avatar) {
   return `http://localhost:3333/files/${avatar}`;
 }
 
-module.exports = {
+class AvatarController {
   async store(req, res) {
-    const user = User.findOne({ id: req.userId });
+    const { avatar } = req.body;
+
+    if (!avatar) {
+      return res.json({ error: "Avatar can't be blank" }).status(400);
+    }
+
+    const user = await User.findOneAndUpdate({ _id: req.userId }, avatar, {
+      new: true,
+    });
 
     return res.json(user);
-  },
-};
+  }
+}
+
+module.exports = new AvatarController();
