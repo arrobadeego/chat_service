@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Yup = require('yup');
-const path = require('path');
-const fs = require('fs');
 
 const User = require('./User');
 const authConfig = require('../../config/auth.js');
@@ -13,11 +11,11 @@ function generateToken(params = {}) {
   });
 }
 
-function setPhoto(photo) {
-  if (photo === undefined) {
+function setAvatar(avatar) {
+  if (avatar === undefined) {
     return 'http://localhost:3333/files/undefined.jpg';
   }
-  return `http://localhost:3333/files/${photo}`;
+  return `http://localhost:3333/files/${avatar}`;
 }
 
 module.exports = {
@@ -103,16 +101,6 @@ module.exports = {
   },
 
   async profile(req, res) {
-    const user = await User.findOne({ id: req.userid });
-
-    if (!user) {
-      return res.json('User not found').status(404);
-    }
-
-    return res.json({ id: user.id, name: user.name, email: user.email });
-  },
-
-  async avatar(req, res) {
     const user = await User.findOne({ id: req.userid });
 
     if (!user) {

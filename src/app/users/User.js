@@ -1,6 +1,5 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -11,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photo: {
+  avatar: {
     type: String,
   },
   password: {
@@ -23,15 +22,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  contacts: [
-    { user_id: String, status: String },
-  ],
-  sent: [
-    { user_id: String, status: String },
-  ],
-  received: [
-    { user_id: String, status: String },
-  ],
+  contacts: [{ user_id: String, status: String }],
+  sent: [{ user_id: String, status: String }],
+  received: [{ user_id: String, status: String }],
   createdAt: {
     type: Date,
     default: Date.now,
