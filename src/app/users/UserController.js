@@ -87,23 +87,8 @@ module.exports = {
   },
 
   async profile(req, res) {
-    jwt.verify(
-      req.headers.authorization,
-      authConfig.secret,
-      async (err, decoded) => {
-        const user = await User.findById(decoded.id);
+    const user = await User.findOne({ id: req.userid });
 
-        if (err) return res.json(err);
-        if (!user) return res.json({ error: 'User not found' });
-
-        res.setHeader('Authorization', generateToken({ _id: user.id }));
-
-        return res.json({
-          name: user.name,
-          email: user.email,
-          photo: setPhoto(user.photo),
-        });
-      }
-    );
+    return res.json({ id: user.id, name: user.name, email: user.email });
   },
 };
