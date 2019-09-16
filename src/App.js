@@ -1,20 +1,8 @@
 const express = require('express');
-//const mongoose = require('mongoose');
 const cors = require('cors');
-//const bodyParser = require('body-parser');
-const path = require('path');
-//const io = require('socket.io')(server);
 const routes = require('./routes/routes');
 
-// mongoose.connect('mongodb+srv://admin:12345@cluster0-vybfh.mongodb.net/test?retryWrites=true&w=majority', {
-//   useNewUrlParser: true,
-// });
-
-// app.use((req, res, next) => {
-//   req.io = io;
-
-//   next();
-// });
+require('./database');
 
 class App {
   constructor() {
@@ -27,7 +15,6 @@ class App {
   middlewares() {
     this.server.use(cors());
     this.server.use(express.json());
-    //this.server.use(express.static(path.resolve(__dirname, '..', 'uploads', 'resized')));
   }
 
 
