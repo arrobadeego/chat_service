@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Yup = require('yup');
 const path = require('path');
 const fs = require('fs');
 
@@ -56,11 +57,25 @@ module.exports = {
   },
 
   async store(req, res) {
-    const {
-      name, email,
-    } = req.body;
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      password: Yup.string()
+        .required()
+        .min(6),
+    });
 
-    const { filename: photo } = req.file;
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const userExists = await User.findOne({ email: req.body.email });
+
+    if (userExists) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
 
     let { password } = req.body;
 
@@ -69,19 +84,13 @@ module.exports = {
 
     const status = 1;
 
-    const filename = `${Date.now().toString(36)}.jpg`;
-
     const user = await User.create({
-      name, email, password, status, photo: filename,
+      name: req.body.name, email: req.body.email, password, status,
     });
-
-    req.io.emit('user', user);
-
-    user.password = undefined;
 
     res.setHeader("Authorization", generateToken({ id: user.id }));
 
-    req.io.emit('user', user);
+    user.password = undefined;
 
     return res.json({ user });
   },

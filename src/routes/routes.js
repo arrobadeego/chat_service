@@ -13,7 +13,7 @@ const routes = Router();
 const upload = multer(uploadConfig);
 
 routes.post('/login', UserController.authenticate);
-routes.post('/registration', SessionController.store);
+routes.post('/registration', UserController.store);
 
 routes.use(authMiddleware);
 
