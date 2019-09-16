@@ -15,20 +15,24 @@ function setAvatar(avatar) {
   if (avatar === undefined) {
     return 'http://localhost:3333/files/undefined.jpg';
   }
-  return `http://localhost:3333/files/${avatar}`;
+  return `http://localhost:3333/users/avatar/${avatar}`;
 }
 
 class AvatarController {
   async store(req, res) {
-    const { avatar } = req.body;
+    const { filename } = req.file;
 
-    if (!avatar) {
+    if (!filename) {
       return res.json({ error: "Avatar can't be blank" }).status(400);
     }
 
-    const user = await User.findOneAndUpdate({ _id: req.userId }, avatar, {
-      new: true,
-    });
+    const user = await User.findOneAndUpdate(
+      { _id: req.userId },
+      { avatar: setAvatar(filename) },
+      {
+        new: true,
+      }
+    );
 
     return res.json(user);
   }
