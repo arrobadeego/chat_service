@@ -89,6 +89,10 @@ module.exports = {
   async profile(req, res) {
     const user = await User.findOne({ id: req.userid });
 
+    if (!user) {
+      return res.json('User not found').status(404);
+    }
+
     return res.json({ id: user.id, name: user.name, email: user.email });
   },
 };
