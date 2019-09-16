@@ -16,9 +16,8 @@ function generateToken(params = {}) {
 function setPhoto(photo) {
   if (photo === undefined) {
     return 'http://localhost:3333/files/undefined.jpg';
-  } else {
-    return `http://localhost:3333/files/${photo}`;
   }
+  return `http://localhost:3333/files/${photo}`;
 }
 
 module.exports = {
@@ -51,27 +50,60 @@ module.exports = {
     const status = 1;
 
     const user = await User.create({
-      name: req.body.name, email: req.body.email, password: hash, status,
+      name: req.body.name,
+      email: req.body.email,
+      password: hash,
+      status,
     });
 
-    res.setHeader("Authorization", generateToken({ id: user.id }));
+    res.setHeader('Authorization', generateToken({ id: user.id }));
 
     user.password = undefined;
 
     return res.json({ user });
   },
 
-  async profile(req, res) {
-    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
-      const user = await User.findById(decoded.id);
-
-
-      if (err) return res.json(err);
-      if (!user) return res.json({ error: "User not found" });
-
-      res.setHeader("Authorization", generateToken({ _id: user.id }));
-
-      return res.json({ name: user.name, email: user.email, photo: setPhoto(user.photo) });
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      oldPassword: Yup.string().min(6),
+      password: Yup.string()
+        .min(6)
+        .when('oldPassword', (oldPassword, field) =>
+          oldPassword ? field.required() : field
+        ),
     });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const user = await User.findOneAndUpdate({ _id: req.userId }, req.body, {
+      new: true,
+    });
+
+    return res.json(user);
+  },
+
+  async profile(req, res) {
+    jwt.verify(
+      req.headers.authorization,
+      authConfig.secret,
+      async (err, decoded) => {
+        const user = await User.findById(decoded.id);
+
+        if (err) return res.json(err);
+        if (!user) return res.json({ error: 'User not found' });
+
+        res.setHeader('Authorization', generateToken({ _id: user.id }));
+
+        return res.json({
+          name: user.name,
+          email: user.email,
+          photo: setPhoto(user.photo),
+        });
+      }
+    );
   },
 };
