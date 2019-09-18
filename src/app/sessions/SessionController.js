@@ -12,7 +12,6 @@ function generateToken(params = {}) {
 }
 
 module.exports = {
-
   async store(req, res) {
     const { email, password } = req.body;
 
@@ -22,13 +21,13 @@ module.exports = {
       return res.status(400).json({ error: 'User not found' });
     }
 
-    if (!await bcrypt.compare(password, user.password)) {
+    if (!(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ error: 'Inavlid password' });
     }
 
     user.password = undefined;
 
-    res.setHeader("Authorization", generateToken({ id: user.id }));
+    res.setHeader('Authorization', generateToken({ id: user.id }));
 
     return res.json({ user });
   },

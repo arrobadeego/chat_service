@@ -11,13 +11,6 @@ function generateToken(params = {}) {
   });
 }
 
-function setAvatar(avatar) {
-  if (avatar === undefined) {
-    return 'http://localhost:3333/files/undefined.jpg';
-  }
-  return `http://localhost:3333/files/${avatar}`;
-}
-
 module.exports = {
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -96,6 +89,8 @@ module.exports = {
     user = await User.findOneAndUpdate({ _id: req.userId }, req.body, {
       new: true,
     });
+
+    res.setHeader('Authorization', generateToken({ id: user.id }));
 
     return res.json(user);
   },

@@ -1,6 +1,4 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Yup = require('yup');
 
 const User = require('../users/User');
 const authConfig = require('../../config/auth.js');
@@ -33,6 +31,8 @@ class AvatarController {
         new: true,
       }
     );
+
+    res.setHeader('Authorization', generateToken({ id: user.id }));
 
     return res.json(user);
   }
