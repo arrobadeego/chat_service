@@ -47,7 +47,7 @@ module.exports = {
       status,
     });
 
-    res.setHeader('Authorization', generateToken({ id: user.id }));
+    res.setHeader('Authorization', generateToken({ id: user._id }));
 
     user.password = undefined;
 
@@ -96,12 +96,19 @@ module.exports = {
   },
 
   async profile(req, res) {
-    const user = await User.findOne({ id: req.userid });
+    const user = await User.findOne({ _id: req.userId });
 
     if (!user) {
       return res.json('User not found').status(404);
     }
 
-    return res.json({ id: user.id, name: user.name, email: user.email });
+    res.setHeader('Authorization', generateToken({ id: user._id }));
+
+    return res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    });
   },
 };

@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const routes = require('./routes/routes');
 
@@ -13,12 +14,18 @@ class App {
   }
 
   middlewares() {
-    this.server.use(cors({
-      exposedHeaders: 'Authorization',
-    }));
+    this.server.use(
+      cors({
+        exposedHeaders: 'Authorization',
+      })
+    );
     this.server.use(express.json());
-  }
 
+    this.server.use(
+      '/files',
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+    );
+  }
 
   routes() {
     this.server.use(routes);

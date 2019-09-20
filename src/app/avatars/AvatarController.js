@@ -13,7 +13,7 @@ function setAvatar(avatar) {
   if (avatar === undefined) {
     return 'http://localhost:3333/files/undefined.jpg';
   }
-  return `http://localhost:3333/users/avatar/${avatar}`;
+  return `http://localhost:3333/files/${avatar}`;
 }
 
 class AvatarController {

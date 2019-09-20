@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Yup = require('yup');
+// const Yup = require('yup');
 
 const User = require('../users/User');
 const authConfig = require('../../config/auth.js');
