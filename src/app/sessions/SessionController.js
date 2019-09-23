@@ -29,6 +29,8 @@ module.exports = {
 
     res.setHeader('Authorization', generateToken({ id: user.id }));
 
-    return res.json({ user });
+    return res.json({
+      user,
+    });
   },
 };

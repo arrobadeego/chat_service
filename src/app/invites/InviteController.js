@@ -27,49 +27,69 @@ module.exports = {
   // },
 
   async store(req, res) {
-    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
-      const user = await User.findById(decoded.id);
-      const invited = await User.findById(req.body.id);
+    if (!req.body.email) {
+      return res.json("E-mail can't be blank").status(400);
+    }
 
-      if (err) return res.json(err);
+    const userInvited = await User.findOne({ email: req.body.email });
 
-      user.sent.push({ user_id: req.body.id });
-      invited.received.push({ user_id: user.id });
+    if (!userInvited) {
+      return res.json("This user doesn't exists").status(400);
+    }
 
-      user.save();
-      invited.save();
+    const user = await User.findOne({ _id: req.userId });
 
-      res.setHeader("Authorization", generateToken({ _id: user.id }));
-      return res.json({ user });
-    });
+    if (
+      user.contacts.filter(contact => {
+        return String(contact.user_id) === String(userInvited._id);
+      }).length !== 0
+    ) {
+      return res.json('This user is already your contact').status(400);
+    }
+
+    if (
+      user.sent.filter(s => {
+        return String(s.user_id) === String(userInvited._id);
+      }).length !== 0
+    ) {
+      return res.json('This user was already invited').status(400);
+    }
+
+    user.sent.push({ user_id: userInvited._id });
+    userInvited.received.push({ user_id: user._id });
+
+    await user.save();
+    await userInvited.save();
+
+    return res.json({ user, userInvited });
   },
 
-  async friendRequest(req, res) {
-    jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
-      const user = await User.findById(decoded.id);
-      const request = await User.findById(req.body.id);
+  // async friendRequest(req, res) {
+  //   jwt.verify(req.headers.authorization, authConfig.secret, async (err, decoded) => {
+  //     const user = await User.findById(decoded.id);
+  //     const request = await User.findById(req.body.id);
 
-      if (err) return res.json(err);
-      if (!user) return res.json({ error: "User not found" });
-      if (!request) return res.json({ error: "Invite not found" });
+  //     if (err) return res.json(err);
+  //     if (!user) return res.json({ error: "User not found" });
+  //     if (!request) return res.json({ error: "Invite not found" });
 
-      if (req.body.isAccepted) {
-        // eslint-disable-next-line no-underscore-dangle
-        user.contacts.push({ user_id: request._id, status: 1 });
-        // eslint-disable-next-line no-underscore-dangle
-        request.contacts.push({ user_id: user._id, status: 1 });
-      }
+  //     if (req.body.isAccepted) {
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       user.contacts.push({ user_id: request._id, status: 1 });
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       request.contacts.push({ user_id: user._id, status: 1 });
+  //     }
 
-      // eslint-disable-next-line no-underscore-dangle
-      user.received = await user.received.filter(r => String(r.user_id) !== String(request._id));
-      // eslint-disable-next-line no-underscore-dangle
-      request.sent = await request.sent.filter(r => String(r.user_id) !== String(user._id));
+  //     // eslint-disable-next-line no-underscore-dangle
+  //     user.received = await user.received.filter(r => String(r.user_id) !== String(request._id));
+  //     // eslint-disable-next-line no-underscore-dangle
+  //     request.sent = await request.sent.filter(r => String(r.user_id) !== String(user._id));
 
-      user.save();
-      request.save();
+  //     user.save();
+  //     request.save();
 
-      res.setHeader("Authorization", generateToken({ _id: user.id }));
-      return res.json({ user });
-    });
-  },
+  //     res.setHeader("Authorization", generateToken({ _id: user.id }));
+  //     return res.json({ user });
+  //   });
+  // },
 };
