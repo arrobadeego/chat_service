@@ -29,13 +29,8 @@ module.exports = {
 
     res.setHeader('Authorization', generateToken({ id: user.id }));
 
-    const received = user.received.map(r => {
-      return User.find({ _id: r.user_id }, { name: 1, email: 1 });
-    });
-
     return res.json({
       user,
-      received,
     });
   },
 };
