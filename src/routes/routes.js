@@ -7,7 +7,7 @@ const SessionController = require('../app/sessions/SessionController');
 const AvatarController = require('../app/avatars/AvatarController');
 const InviteController = require('../app/invites/InviteController');
 
-const authMiddleware = require('../routes/middleware');
+const authMiddleware = require('../middlewares/middleware');
 
 const routes = Router();
 const upload = multer(multerConfig);
