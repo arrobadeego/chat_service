@@ -23,8 +23,8 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   contacts: [{ user_id: String, status: String }],
-  sent: [{ user_id: String, status: String }],
-  received: [{ user_id: String, status: String }],
+  sent: [{ user_id: String, name: String, email: String, status: String }],
+  received: [{ user_id: String, name: String, email: String, status: String }],
   createdAt: {
     type: Date,
     default: Date.now,

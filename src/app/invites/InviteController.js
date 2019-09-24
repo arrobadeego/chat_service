@@ -55,8 +55,17 @@ module.exports = {
       return res.json('This user was already invited').status(400);
     }
 
-    user.sent.push({ user_id: userInvited._id });
-    userInvited.received.push({ user_id: user._id });
+    user.sent.push({
+      user_id: userInvited._id,
+      name: userInvited.name,
+      email: userInvited.email,
+    });
+
+    userInvited.received.push({
+      user_id: user._id,
+      name: user.name,
+      email: user.email,
+    });
 
     await user.save();
     await userInvited.save();
