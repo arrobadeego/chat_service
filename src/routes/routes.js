@@ -21,8 +21,5 @@ routes.get('/users', UserController.profile);
 routes.put('/users', UserController.update);
 routes.put('/users/avatar', upload.single('avatar'), AvatarController.store);
 routes.post('/invites', InviteController.store);
-// routes.get('/contacts', ContactController.list);
-// routes.post('/sent', InviteController.store);
-// routes.post('/sent/request', InviteController.friendRequest);
 
 module.exports = routes;
