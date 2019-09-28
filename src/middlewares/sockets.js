@@ -1,10 +1,13 @@
-// const MasterSocket = require('../MasterSocket');
-const { myWebsocket } = require('../App');
-
 module.exports = async (req, res, next) => {
-  // websocket.on('connection', socket => {
+  global.io.on('connect', ws => {
+    console.log(`Socket connected ${ws}`);
 
-  console.log(`deu certo! ${myWebsocket.socket}`);
-  // });
+    // ws.on('sendMessage', data => {
+    //   console.log(data);
+    // });
+
+    ws.emit('teste', { id: 1, name: 'Diego' });
+  });
+
   return next();
 };
