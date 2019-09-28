@@ -1,18 +1,15 @@
-// // function socketInitialize(server) {
-// //   return require('socket.io')(server);
-// // }
+const WebSocket = require('ws');
 
-// class Socket {
-//   constructor(server) {
-//     this.io = require('socket.io');
-//   }
-//   // io.on('connection', socket => {
-//   //   console.log('Socket connected');
-//   //   io.emit('sendMessage', 'será que funciona na volta?');
-//   //   //   socket.on('sendMessage', data => {
-//   //   //     console.log(`Mensagem recebida: ${data}`);
-//   //   //   });
-//   // });
-// }
+const Socket = function() {
+  this.mywss = new WebSocket.Server({ port: 8989 });
+};
 
-// module.exports = new Socket().io;
+Socket.prototype.broadcast = function() {};
+
+Socket.prototype.connection = function() {};
+
+Socket.prototype.emit = function() {
+  // aqui pode chamar this.mywss.emit() *eu acho que emit assim*
+};
+
+module.exports = new Socket();

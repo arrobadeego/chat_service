@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const WebSocket = require('ws');
 
-// require('./config/socket');
-
+const MasterSocket = require('./MasterSocket');
 const routes = require('./routes/routes');
 
 require('./database');
@@ -13,7 +13,13 @@ class App {
     this.app = express();
 
     this.server = require('http').Server(this.app);
+
+    this.myWebsocket = new WebSocket.Server({ server: this.server });
+
+    this.socket = new MasterSocket(this.myWebsocket);
+
     this.middlewares();
+
     this.routes();
   }
 
@@ -35,5 +41,5 @@ class App {
     this.app.use(routes);
   }
 }
-
-module.exports = new App().server;
+const { server, myWebsocket } = new App();
+module.exports = { server, myWebsocket };
