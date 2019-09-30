@@ -92,6 +92,11 @@ module.exports = {
 
     res.setHeader('Authorization', generateToken({ id: user.id }));
 
+    req.io.emit('notifyInvite', {
+      type: 'notifyInvite',
+      mensagem: 'deu certo',
+    });
+
     return res.json(user);
   },
 
@@ -103,6 +108,8 @@ module.exports = {
     }
 
     res.setHeader('Authorization', generateToken({ id: user._id }));
+
+    console.log(req.io);
 
     return res.json({
       id: user._id,

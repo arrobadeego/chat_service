@@ -70,6 +70,8 @@ module.exports = {
     await user.save();
     await userInvited.save();
 
+    req.io.emit('NOTIFY_INVITE', userInvited);
+
     return res.json({ user, userInvited });
   },
 

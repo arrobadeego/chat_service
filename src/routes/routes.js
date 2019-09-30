@@ -13,6 +13,7 @@ const socketMiddleware = require('../middlewares/sockets');
 const routes = Router();
 const upload = multer(multerConfig);
 
+
 routes.post('/registration', UserController.store);
 routes.post('/login', SessionController.store);
 
@@ -24,8 +25,4 @@ routes.put('/users', UserController.update);
 routes.put('/users/avatar', upload.single('avatar'), AvatarController.store);
 routes.post('/invites', InviteController.store);
 
-function teste(data) {
-  console.log(data);
-}
-module.exports = teste;
 module.exports = routes;
