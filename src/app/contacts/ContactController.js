@@ -8,36 +8,47 @@ function generateToken(params = {}) {
   });
 }
 
-function setAvatar(avatar) {
-  if (avatar === undefined) {
-    return 'http://localhost:3333/files/undefined.jpg';
-  }
-  return `http://localhost:3333/files/${avatar}`;
-}
-
 module.exports = {
-  // async list(req, res) {
-  //   jwt.verify(
-  //     req.headers.authorization,
-  //     authConfig.secret,
-  //     async (err, decoded) => {
-  //       const user = await User.findById(decoded.id);
-  //       res.setHeader('Authorization', generateToken({ id: user.id }));
+  async store(req, res) {
+    const user = await User.findOne({ _id: req.userId });
 
-  //       const contactsIds = user.contacts.map(contact => contact.user_id);
-  //       const contactsList = await User.find({ _id: { $in: contactsIds } });
+    const userRequest = await User.findOne({ _id: req.body.user_id });
 
-  //       // eslint-disable-next-line no-underscore-dangle
-  //       const contacts = contactsList.map(contact => ({
-  //         // eslint-disable-next-line no-underscore-dangle
-  //         id: contact._id,
-  //         name: contact.name,
-  //         status: contact.status,
-  //         avatar: setAvatar(contact.avatar),
-  //       }));
+    if (
+      user.received.filter(r => {
+        return String(r.user_id) === String(userRequest._id);
+      }).length === 0
+    ) {
+      return res.json('This invite not exists').status(400);
+    }
 
-  //       return res.json({ contacts });
-  //     }
-  //   );
-  // },
+    await User.update(
+      { _id: user._id },
+      { $pull: { received: { user_id: userRequest._id } } }
+    );
+
+    await User.update(
+      { _id: userRequest._id },
+      { $pull: { sent: { user_id: user._id } } }
+    );
+
+    if (req.body.isAccept) {
+      user.contacts.push({
+        user_id: userRequest._id,
+        name: userRequest.name,
+        email: userRequest.email,
+      });
+
+      userRequest.contacts.push({
+        user_id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    }
+
+    await user.save();
+    await userRequest.save();
+
+    res.json(user);
+  },
 };
