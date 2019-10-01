@@ -10,9 +10,9 @@ function generateToken(params = {}) {
 
 module.exports = {
   async store(req, res) {
-    const user = await User.findOne({ _id: req.userId });
+    let user = await User.findOne({ _id: req.userId });
 
-    const userRequest = await User.findOne({ _id: req.body.user_id });
+    let userRequest = await User.findOne({ _id: req.body.user_id });
 
     if (
       user.received.filter(r => {
@@ -22,14 +22,16 @@ module.exports = {
       return res.json('This invite not exists').status(400);
     }
 
-    await User.update(
+    user = await User.findOneAndUpdate(
       { _id: user._id },
-      { $pull: { received: { user_id: userRequest._id } } }
+      { $pull: { received: { user_id: userRequest._id } } },
+      { new: true }
     );
 
-    await User.update(
+    userRequest = await User.findOneAndUpdate(
       { _id: userRequest._id },
-      { $pull: { sent: { user_id: user._id } } }
+      { $pull: { sent: { user_id: user._id } } },
+      { new: true }
     );
 
     if (req.body.isAccept) {
@@ -49,6 +51,6 @@ module.exports = {
     await user.save();
     await userRequest.save();
 
-    res.json(user);
+    return res.json(user);
   },
 };
