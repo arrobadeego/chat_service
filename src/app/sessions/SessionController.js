@@ -29,8 +29,16 @@ module.exports = {
 
     res.setHeader('Authorization', generateToken({ id: user.id }));
 
+    const contacts = user.contacts.map(async contact => {
+      await User.findOne(
+        { _id: contact.user_id },
+        { name: 1, email: 1, status: 1, _id: 1, avatar: 1 }
+      );
+    });
+
     return res.json({
       user,
+      contacts,
     });
   },
 };

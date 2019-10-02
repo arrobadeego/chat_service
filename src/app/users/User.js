@@ -22,9 +22,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  contacts: [{ user_id: String, status: String }],
-  sent: [{ user_id: String, name: String, email: String, status: String }],
-  received: [{ user_id: String, name: String, email: String, status: String }],
+  contacts: [
+    {
+      user_id: String,
+      name: String,
+      status: String,
+      avatar: String,
+    },
+  ],
+  sent: [{ user_id: String, name: String, email: String }],
+  received: [{ user_id: String, name: String, email: String }],
   createdAt: {
     type: Date,
     default: Date.now,

@@ -36,20 +36,24 @@ module.exports = {
 
     if (req.body.isAccept) {
       user.contacts.push({
-        user_id: userRequest._id,
+        user: userRequest._id,
         name: userRequest.name,
-        email: userRequest.email,
+        status: userRequest.status,
+        avatar: userRequest.avatar,
       });
 
       userRequest.contacts.push({
         user_id: user._id,
         name: user.name,
-        email: user.email,
+        status: user.status,
+        avatar: user.avatar,
       });
     }
 
     await user.save();
     await userRequest.save();
+
+    user = await User.findOne({ _id: req.userId });
 
     return res.json(user);
   },
