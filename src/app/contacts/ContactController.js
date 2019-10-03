@@ -36,7 +36,7 @@ module.exports = {
 
     if (req.body.isAccept) {
       user.contacts.push({
-        user: userRequest._id,
+        user_id: userRequest._id,
         name: userRequest.name,
         status: userRequest.status,
         avatar: userRequest.avatar,
@@ -56,5 +56,34 @@ module.exports = {
     user = await User.findOne({ _id: req.userId });
 
     return res.json(user);
+  },
+
+  async show(req, res) {
+    const user = await User.findOne({ _id: req.userId });
+
+    const contact = await User.findOne({ _id: req.params.user_id });
+
+    // console.log(req.body);
+    console.log(req.params.user_id);
+
+    if (
+      user.contacts.filter(c => {
+        return String(c.user_id) === String(contact._id);
+      }).length === 0
+    ) {
+      return res.json('You and him are not contacts').status(400);
+    }
+
+    // user = await User.findOneAndUpdate(
+    //   { _id: user._id },
+    //   { $pull: { received: { user_id: userRequest._id } } },
+    //   { new: true }
+    // );
+
+    // await user.save();
+
+    // user = await User.findOne({ _id: req.userId });
+
+    return res.json(contact);
   },
 };
