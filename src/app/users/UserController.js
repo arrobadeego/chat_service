@@ -90,7 +90,7 @@ module.exports = {
       new: true,
     });
 
-    res.setHeader('Authorization', generateToken({ id: user.id }));
+    res.setHeader('Authorization', generateToken({ id: user._id }));
 
     return res.json(user);
   },
